@@ -62,4 +62,4 @@ Note that each of these files are always added to each component, so in most cas
 
 ## Contributing
 
-Please see our [Contributor Code of Conduct](https://github.com/ionic-team/ionic/blob/master/CODE_OF_CONDUCT.md) for information on our rules of conduct.
+Please see our [Contributor Code of Conduct](https://github.com/stenciljs/.github/blob/main/CODE_OF_CONDUCT.md) for information on our rules of conduct.

@@ -14,7 +14,7 @@ type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
  *
  * This function creates & configures the plugin to be used by consuming Stencil projects
  *
- * For configuration details, please see the [GitHub README](https://github.com/ionic-team/stencil-sass).
+ * For configuration details, please see the [GitHub README](https://github.com/stenciljs/sass).
  *
  * @param opts options to configure the plugin
  * @return the configured plugin
