@@ -51,14 +51,14 @@ runs:
       run: npm version --no-git-tag-version ${{ inputs.version }}
       shell: bash
 
+    - name: Create Changelog
+      if: inputs.tag == 'latest'
+      run: git log --pretty=format:"%h %ad %s [%an]" --date=short $(git describe --tags --abbrev=0)..HEAD | npx git-conventional-commits changelog --config ./.github/git-conventional-commits.yml > CHANGELOG.md
+      shell: bash
+
     - name: Bump Version
       if: inputs.tag == 'latest'
       run: npm version ${{ inputs.version }}
-      shell: bash
-
-    - name: Create Changelog
-      if: inputs.tag == 'latest'
-      run: git log --pretty=format:"%h %ad %s [%an]" --date=short | npx git-conventional-commits changelog --config ./.github/git-conventional-commits.yml > CHANGELOG.md
       shell: bash
     
     - name: Get Tag Name
@@ -69,6 +69,13 @@ runs:
         echo "PKG_JSON_VERSION=$PKG_JSON_VERSION" >> $GITHUB_OUTPUT
       shell: bash
 
+    - name: Push Version
+      if: inputs.tag == 'latest'
+      run: git push origin main
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+  
     - name: Push Release
       if: inputs.tag == 'latest'
       uses: softprops/action-gh-release@v2
