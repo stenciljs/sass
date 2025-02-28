@@ -7,3 +7,6 @@ dist/
 # IDEs
 .vscode/*
 .idea/*
+
+# We keep the changelog in the release tab of the project
+CHANGELOG.md

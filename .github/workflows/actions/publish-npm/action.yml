@@ -35,13 +35,54 @@ runs:
       run: rm stencil-sass-build.zip
       shell: bash
 
+    - name: Configure Git
+      if: inputs.tag == 'latest'
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+      shell: bash
+
     - name: Bump Version
+      if: inputs.tag == 'dev'
       run: npm version --no-git-tag-version ${{ inputs.version }}
       shell: bash
 
+    - name: Bump Version
+      if: inputs.tag == 'latest'
+      run: npm version ${{ inputs.version }}
+      shell: bash
+
+    - name: Create Changelog
+      if: inputs.tag == 'latest'
+      run: git log --pretty=format:"%h %ad %s [%an]" --date=short | npx git-conventional-commits changelog --config ./.github/git-conventional-commits.yml > CHANGELOG.md
+      shell: bash
+    
+    - name: Get Tag Name
+      id: package-version
+      if: inputs.tag == 'latest'
+      run: |
+        PKG_JSON_VERSION=$(cat package.json | jq -r '.version')
+        echo "PKG_JSON_VERSION=$PKG_JSON_VERSION" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Push Release
+      if: inputs.tag == 'latest'
+      uses: ncipollo/release-action@v1
+      with:
+        body_path: CHANGELOG.md
+        generate_release_notes: true
+        make_latest: true
+        tag_name: ${{ steps.package-version.outputs.PKG_JSON_VERSION }}
+
     # Log the git diff for easy debugging
     - name: Log Generated Changes
+      if: inputs.tag == 'dev'
       run: git --no-pager diff
+      shell: bash
+
+    - name: Log Generated Changes
+      if: inputs.tag == 'latest'
+      run: cat CHANGELOG.md
       shell: bash
 
     # Log the git status for easy debugging
