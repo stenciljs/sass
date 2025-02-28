@@ -73,7 +73,7 @@ runs:
       if: inputs.tag == 'latest'
       run: |
         git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        git push origin main
+        git push origin main --force
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
