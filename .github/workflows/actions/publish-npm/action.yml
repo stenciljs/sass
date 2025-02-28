@@ -56,7 +56,7 @@ runs:
 
     - name: Bump Version
       if: inputs.tag == 'dev'
-      run: npm version --no-git-tag-version ${{ inputs.version }}
+      run: npm version --no-git-tag-version ${{ inputs.version }} --tag-version-prefix="v"
       shell: bash
 
     - name: Create Changelog
@@ -66,14 +66,14 @@ runs:
 
     - name: Bump Version
       if: inputs.tag == 'latest'
-      run: npm version ${{ inputs.version }}
+      run: npm version ${{ inputs.version }} --tag-version-prefix="v"
       shell: bash
     
     - name: Get Tag Name
       id: package-version
       if: inputs.tag == 'latest'
       run: |
-        PKG_JSON_VERSION=$(cat package.json | jq -r '.version')
+        PKG_JSON_VERSION=v$(cat package.json | jq -r '.version')
         echo "PKG_JSON_VERSION=$PKG_JSON_VERSION" >> $GITHUB_OUTPUT
       shell: bash
 
