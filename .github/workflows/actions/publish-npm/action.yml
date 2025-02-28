@@ -69,10 +69,10 @@ runs:
       if: inputs.tag == 'latest'
       uses: ncipollo/release-action@v1
       with:
-        body_path: CHANGELOG.md
-        generate_release_notes: true
-        make_latest: true
-        tag_name: ${{ steps.package-version.outputs.PKG_JSON_VERSION }}
+        bodyPath: CHANGELOG.md
+        generateReleaseNotes: true
+        makeLatest: true
+        tagName: ${{ steps.package-version.outputs.PKG_JSON_VERSION }}
 
     # Log the git diff for easy debugging
     - name: Log Generated Changes
