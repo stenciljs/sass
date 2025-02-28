@@ -75,6 +75,11 @@ runs:
         make_latest: true
         tag_name: ${{ steps.package-version.outputs.PKG_JSON_VERSION }}
 
+    - name: Push Version
+      if: inputs.tag == 'latest'
+      run: git push origin main
+      shell: bash
+  
     # Log the git diff for easy debugging
     - name: Log Generated Changes
       if: inputs.tag == 'dev'
