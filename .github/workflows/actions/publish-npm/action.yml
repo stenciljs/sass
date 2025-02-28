@@ -39,13 +39,6 @@ runs:
       run: rm stencil-sass-build.zip
       shell: bash
 
-    - name: Configure Git
-      if: inputs.tag == 'latest'
-      run: |
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git config --global user.name "github-actions[bot]"
-      shell: bash
-
     - name: Bump Version
       if: inputs.tag == 'dev'
       run: npm version --no-git-tag-version ${{ inputs.version }}
@@ -71,7 +64,11 @@ runs:
 
     - name: Push Version
       if: inputs.tag == 'latest'
-      run: git push origin main
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        git push origin main
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
