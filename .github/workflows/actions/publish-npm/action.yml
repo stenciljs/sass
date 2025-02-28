@@ -56,7 +56,11 @@ runs:
 
     - name: Create Changelog
       if: inputs.tag == 'latest'
-      run: git log --pretty=format:"%h %ad %s [%an]" --date=short $(git describe --tags --abbrev=0)..HEAD | npx git-conventional-commits changelog --config ./.github/git-conventional-commits.yml > CHANGELOG.md
+      run: |
+        LAST_TAG=$(git describe --tags --abbrev=0)
+        echo "Create Changelog $LAST_TAG..HEAD"
+        git log --pretty=format:"%h %ad %s [%an]" --date=short $LAST_TAG..HEAD | npx git-conventional-commits changelog --config ./.github/git-conventional-commits.yml > CHANGELOG.md
+        cat CHANGELOG.md
       shell: bash
 
     - name: Bump Version
@@ -94,11 +98,6 @@ runs:
     - name: Log Generated Changes
       if: inputs.tag == 'dev'
       run: git --no-pager diff
-      shell: bash
-
-    - name: Log Generated Changes
-      if: inputs.tag == 'latest'
-      run: cat CHANGELOG.md
       shell: bash
 
     # Log the git status for easy debugging
