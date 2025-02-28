@@ -24,8 +24,8 @@ runs:
     - name: Checkout Code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       with:
+        fetch-depth: 0
         token: ${{ inputs.github-token }}
-
 
     - name: Get Core Dependencies
       uses: ./.github/workflows/actions/get-core-dependencies
@@ -61,7 +61,7 @@ runs:
 
     - name: Bump Version
       if: inputs.tag == 'latest'
-      run: npm version ${{ inputs.version }} --tag-version-prefix="v"
+      run: npm version ${{ inputs.version }} --tag-version-prefix="v" --message "v%s"
       shell: bash
     
     - name: Get Tag Name
