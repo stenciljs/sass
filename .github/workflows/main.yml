@@ -31,27 +31,27 @@ jobs:
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       with:
         persist-credentials: false
-    - name: Use Node from Volta
-      uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
-      with:
-        node-version-file: 'package.json'
-        cache: 'npm'
-    - name: Install Dependencies
-      run: npm ci
-      shell: bash
+    
+    - name: Get Core Dependencies
+      uses: stenciljs/.github/actions/get-core-dependencies@main
+
     - name: Prettier Check
       run: npm run prettier.dry-run
       shell: bash
+
     - name: Install Stencil ${{matrix.stencil_version}}
       run: npm install --save-dev @stencil/core@${{matrix.stencil_version}}
       shell: bash
       if: ${{ matrix.stencil_version != 'DEFAULT' }}
+
     - name: Report Stencil Version
       run: npm ls @stencil/core
       shell: bash
+
     - name: Build
       run: npm run build -- --ci
       shell: bash
+
     - name: Test
       run: npm run test.ci
       shell: bash
