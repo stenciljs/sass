@@ -63,7 +63,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: ./.github/workflows/actions/publish-npm
+      - uses: stenciljs/.github/actions/publish-npm
         with:
           tag: dev
           version: ${{ needs.get_dev_version.outputs.dev-version }}
@@ -80,7 +80,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: ./.github/workflows/actions/publish-npm
+      - uses: stenciljs/.github/actions/publish-npm
         with:
           tag: latest
           version: ${{ inputs.releaseType }}
