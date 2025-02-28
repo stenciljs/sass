@@ -67,12 +67,12 @@ runs:
 
     - name: Push Release
       if: inputs.tag == 'latest'
-      uses: ncipollo/release-action@v1
+      uses: softprops/action-gh-release@v2
       with:
-        bodyPath: CHANGELOG.md
-        generateReleaseNotes: true
-        makeLatest: true
-        tagName: ${{ steps.package-version.outputs.PKG_JSON_VERSION }}
+        body_path: CHANGELOG.md
+        generate_release_notes: true
+        make_latest: true
+        tag_name: ${{ steps.package-version.outputs.PKG_JSON_VERSION }}
 
     # Log the git diff for easy debugging
     - name: Log Generated Changes
