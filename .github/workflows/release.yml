@@ -85,4 +85,4 @@ jobs:
           tag: latest
           version: ${{ inputs.releaseType }}
           token: ${{ secrets.NPM_PAT_STENCIL_BOT }}
-        
+          github-token: ${{ secrets.GH_ADMIN_PAT }}

@@ -29,7 +29,7 @@ changelog:
   - chore    # Miscellaneous commits e.g. modifying `.gitignore`
   - docs
   - merge
-  includeInvalidCommits: true
+  includeInvalidCommits: false
   commitScopes: ["deps", "internal", "ci"]
   commitIgnoreRegexPattern: "^WIP "
   headlines:
