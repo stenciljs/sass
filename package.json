@@ -26,6 +26,9 @@
     "test.ci": "npm run test && npm run prettier.dry-run",
     "test.watch": "jest --watch"
   },
+  "dependencies": {
+    "sass-embedded": "^1.85.1"
+  },
   "peerDependencies": {
     "@stencil/core": ">=2.0.0 || >=3.0.0-beta.0 || >= 4.0.0-beta.0 || >= 4.0.0"
   },
@@ -41,7 +44,6 @@
     "prettier": "^3.5.2",
     "rimraf": "^6.0.1",
     "rollup": "^4.34.8",
-    "sass-embedded": "^1.85.1",
     "terser": "^5.39.0",
     "ts-jest": "^29.2.6",
     "typescript": "~5.7.3"
