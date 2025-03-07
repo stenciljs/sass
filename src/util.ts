@@ -139,7 +139,7 @@ export function getRenderOptions(
           }
         }
       }
-      done(null);
+      done({ file: context.sys.normalizePath(url) });
     };
     importers.push(importer);
 
