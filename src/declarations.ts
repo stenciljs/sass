@@ -1,3 +1,5 @@
+import type { DeprecationOrId } from 'sass-embedded';
+
 export * from '@stencil/core/internal';
 
 export interface PluginOptions {
@@ -72,6 +74,19 @@ export interface PluginOptions {
    * Determines the output format of the final CSS style.
    */
   outputStyle?: 'compressed' | 'expanded';
+
+  /**
+   * If true, Sass won't print warnings that are caused by dependencies.
+   * A "dependency" is defined as any file that's loaded through loadPaths or importers.
+   * Stylesheets that are imported relative to the entrypoint are not considered dependencies.
+   */
+  quietDeps?: boolean;
+
+  /**
+   * If true, Sass won't print warnings that are caused by deprecated features.
+   * @see: https://sass-lang.com/documentation/js-api/interfaces/stringoptions/#silenceDeprecations
+   */
+  silenceDeprecations?: DeprecationOrId[];
 
   /**
    * Enables the outputting of a source map.
