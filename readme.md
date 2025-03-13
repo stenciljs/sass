@@ -18,7 +18,9 @@ import { sass } from '@stencil/sass';
 
 export const config: Config = {
   plugins: [
-    sass()
+    sass({
+      // Optional config options
+    })
   ]
 };
 ```
@@ -30,6 +32,19 @@ During development, this plugin will kick-in for `.scss` or `.sass` style urls, 
 
 Sass options can be passed to the plugin within the stencil config, which are used directly by `sass`. Please reference [sass documentation](https://www.npmjs.com/package/sass) for all available options. Note that this plugin automatically adds the component's directory to the `includePaths` array.
 
+### Silence Deprecation Warnings
+
+The `quietDepts` option can be used to silence Sass deprecation warnings, including the @import rule deprecation warning that will be removed in Dart Sass 3.0.0. To enable this:
+
+```js
+exports.config = {
+  plugins: [
+    sass({
+      quietDepts: true
+    })
+  ]
+};
+```
 
 ### Inject Globals Sass Paths
 

@@ -146,7 +146,19 @@ export function getRenderOptions(
     renderOpts.importer = importers;
   }
 
-  renderOpts.silenceDeprecations = [...(renderOpts.silenceDeprecations ?? []), 'legacy-js-api'];
+  // Initialize silenceDeprecations array if it doesn't exist
+  renderOpts.silenceDeprecations = renderOpts.silenceDeprecations || [];
+
+  // Add legacy-js-api to silenceDeprecations
+  renderOpts.silenceDeprecations.push('legacy-js-api');
+
+  // If quietDepts is true, add 'import' to silenceDeprecations to silence @import deprecation warnings
+  if (opts.quietDepts) {
+    renderOpts.silenceDeprecations.push('import');
+  }
+
+  // Remove the non-standard quietDepts option
+  delete (renderOpts as any).quietDepts;
 
   return renderOpts;
 }

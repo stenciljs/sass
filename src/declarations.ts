@@ -92,6 +92,11 @@ export interface PluginOptions {
    * The value will be emitted as `sourceRoot` in the source map information.
    */
   sourceMapRoot?: string;
+
+  /**
+   * When true, silences deprecation warnings from Sass, including @import rule deprecation warnings.
+   */
+  quietDepts?: boolean;
 }
 
 export type ImporterReturnType = { file: string } | { contents: string } | Error | null;
