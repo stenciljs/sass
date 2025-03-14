@@ -18,7 +18,9 @@ import { sass } from '@stencil/sass';
 
 export const config: Config = {
   plugins: [
-    sass()
+    sass({
+      // Optional config options
+    })
   ]
 };
 ```
@@ -49,6 +51,27 @@ exports.config = {
 ```
 
 Note that each of these files are always added to each component, so in most cases they shouldn't contain CSS because it'll get duplicated in each component. Instead, `injectGlobalPaths` should only be used for Sass variables, mixins and functions, but does not contain any CSS.
+
+
+### Warning Controls
+
+To control and suppress different types of Sass warnings you can use the following options:
+
+- `quietDeps`: Silences warnings from dependencies (files loaded through `loadPaths` or `importers`)
+- `silenceDeprecations`: Silences specific deprecation warnings by their identifiers (e.g., 'import' for @import rule warnings)
+
+```js
+exports.config = {
+  plugins: [
+    sass({
+      // Silence all dependency warnings
+      quietDeps: true,
+      // Silence specific deprecation warnings
+      silenceDeprecations: ['import']
+    })
+  ]
+};
+```
 
 
 ## Related
