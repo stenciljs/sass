@@ -30,7 +30,7 @@ describe('getRenderOptions', () => {
       injectGlobalPaths: ['/my/global/variables.scss']
     };
     const output = util.getRenderOptions(input, sourceText, fileName, context);
-    expect(output.data).toBe(`@import "/my/global/variables.scss";body { color: blue; }`);
+    expect(output.data).toBe(`@use "/my/global/variables.scss" as *;body { color: blue; }`);
     // `injectGlobalPaths` in an input argument to the function, and does not exist on the return type (hence the type assertion)
     // we have this check to verify that we have not accidentally copied it to the generated configuration
     expect((output as any).injectGlobalPaths).toBeUndefined();
