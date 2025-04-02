@@ -74,7 +74,7 @@ export function getRenderOptions(
 
         const importTerminator = renderOpts.indentedSyntax ? '\n' : ';';
 
-        return `@import "${injectGlobalPath}"${importTerminator}`;
+        return `@use "${injectGlobalPath}" as *${importTerminator}`;
       })
       .join('');
 
