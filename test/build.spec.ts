@@ -1,9 +1,8 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { sass } from '../dist';
 import { PluginCtx } from '../dist/declarations';
-
-import * as fs from 'fs';
-import * as path from 'path';
-
 
 describe('test build', () => {
   let context: PluginCtx;
@@ -52,7 +51,7 @@ describe('test build', () => {
       path.join(__dirname, 'fixtures', 'scss', 'variables.scss')
     ]);
     expect(results.diagnostics).toEqual(undefined);
-    expect(context.sys.normalizePath).toBeCalledTimes(1)
+    expect(context.sys.normalizePath).toHaveBeenCalledTimes(1)
   });
 
   it('transform, error scss', async () => {
