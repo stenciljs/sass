@@ -5,6 +5,11 @@ updates:
   schedule:
     interval: weekly
   open-pull-requests-limit: 10
+  ignore:
+    # update with `.nvmrc`
+    - dependency-name: "@types/node"
+      update-types:
+        - "version-update:semver-major"
   groups:
     patch-deps-updates-main:
       update-types:
