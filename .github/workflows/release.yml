@@ -83,4 +83,4 @@ jobs:
         with:
           tag: latest
           version: ${{ inputs.releaseType }}
-          github-token: ${{ secrets.GH_ADMIN_PAT }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
