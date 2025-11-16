@@ -1,0 +1,31 @@
+name: 'Stencil Sass Production Release'
+
+on:
+  workflow_call:
+    inputs:
+      bump:
+        description: 'Semver bump to apply (patch, minor, major).'
+        required: true
+        type: choice
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build_stencil_sass:
+    name: 🏗️ Build Stencil Sass
+    uses: ./.github/workflows/build.yml
+
+  publish_production:
+    name: 🚀 Publish Production Build
+    needs: build_stencil_sass
+    uses: ./.github/workflows/publish-npm.yml
+    with:
+      tag: latest
+      version: ${{ inputs.bump }}
