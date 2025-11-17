@@ -1,4 +1,4 @@
-name: 'Stencil Sass Release'
+name: 'Release - Stencil Sass'
 
 on:
   workflow_dispatch:
