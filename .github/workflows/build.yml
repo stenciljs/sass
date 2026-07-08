@@ -18,12 +18,18 @@ jobs:
           ref: ${{ github.event_name == 'pull_request_target' && format('refs/pull/{0}/merge', github.event.number) || '' }}
           persist-credentials: false
 
-      - name: 📦 Enable Corepack (pnpm)
-        run: corepack enable
-        shell: bash
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
-      - name: 🕸️ Get Core Dependencies
-        uses: stenciljs/.github/actions/get-core-dependencies@main
+      - name: 🟢 Setup Node
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: 📥 Install Dependencies
+        run: pnpm install --frozen-lockfile
+        shell: bash
 
       - name: 🏗️ Stencil Sass Build
         run: pnpm run build

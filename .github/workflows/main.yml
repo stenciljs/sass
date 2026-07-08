@@ -17,13 +17,9 @@ jobs:
         # Run with multiple different versions of Stencil in parallel:
         # 1. DEFAULT - uses the version of Stencil written in `pnpm-lock.yaml`, keeping the same version used by the
         # Stencil team as a source of truth
-        # 2. 2 - will install the latest release under major version 2 of Stencil. This should be kept as long as this
-        # library supports Stencil v2.Y.Z
-        # 3. 3 - will install the latest release under major version 3 of Stencil. This should be kept as long as this
-        # library supports Stencil v3.Y.Z
-        # 4. 4 - will install the latest release under major version 4 of Stencil. This should be kept as long as this
+        # 2. 4 - will install the latest release under major version 4 of Stencil. This should be kept as long as this
         # library supports Stencil v4.Y.Z
-        stencil_version: ['DEFAULT', '2', '3', '4']
+        stencil_version: ['DEFAULT', '4']
     runs-on: ubuntu-latest
 
     steps:
@@ -31,13 +27,19 @@ jobs:
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
-    
-    - name: 📦 Enable Corepack (pnpm)
-      run: corepack enable
-      shell: bash
 
-    - name: 🕸️ Get Core Dependencies
-      uses: stenciljs/.github/actions/get-core-dependencies@main
+    - name: 📦 Setup pnpm
+      uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+    - name: 🟢 Setup Node
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'pnpm'
+
+    - name: 📥 Install Dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash
 
     - name: 📝 Prettier Check
       run: pnpm run prettier.dry-run

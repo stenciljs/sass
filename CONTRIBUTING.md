@@ -194,7 +194,7 @@ test: add tests for edge cases in util functions
    - [ ] Documentation updated if needed
 
 2. **Test Against Multiple Stencil Versions**
-   - The CI tests against Stencil v2, v3, v4, and the default version
+   - The CI tests against Stencil v4 and the default version
    - Ensure your changes work with all supported versions
 
 ### Pull Request Checklist
