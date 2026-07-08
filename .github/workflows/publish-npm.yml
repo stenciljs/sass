@@ -81,10 +81,6 @@ jobs:
           registry-url: ${{ inputs.registry-url }}
           scope: ${{ inputs.scope }}
 
-      - name: 🔄 Ensure Latest npm
-        run: npm install -g npm@latest
-        shell: bash
-
       - name: 📦 Install Dependencies
         if: ${{ inputs.install-command != '' }}
         run: ${{ inputs.install-command }}
@@ -103,7 +99,7 @@ jobs:
         working-directory: ${{ inputs.package-directory }}
 
       - name: 🚀 Publish to npm
-        run: npm publish --tag ${{ inputs.tag }} --provenance
+        run: npm publish --tag ${{ inputs.tag }}
         shell: bash
         working-directory: ${{ inputs.package-directory }}
 
