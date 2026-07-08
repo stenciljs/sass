@@ -11,7 +11,7 @@ Please read and follow our [Contributor Code of Conduct](https://github.com/sten
 ### Prerequisites
 
 - **Node.js**: Version 22.14.0 or higher (we recommend using [nvm](https://github.com/nvm-sh/nvm) to manage Node.js versions)
-- **npm**: Version 10.9.2 or higher
+- **pnpm**: Version 9 or higher (run via `corepack enable`, or see the [pnpm docs](https://pnpm.io/installation))
 - **Git**: For version control
 
 ### Getting Started
@@ -24,17 +24,17 @@ Please read and follow our [Contributor Code of Conduct](https://github.com/sten
 
 2. **Install Dependencies**
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Build the Project**
    ```bash
-   npm run build
+   pnpm build
    ```
 
 4. **Run Tests**
    ```bash
-   npm test
+   pnpm test
    ```
 
 ## Project Structure
@@ -58,13 +58,13 @@ sass/
 
 ### Available Scripts
 
-- `npm run build` - Build the plugin for distribution
-- `npm run watch` - Build and watch for changes during development
-- `npm test` - Run the test suite
-- `npm run test.watch` - Run tests in watch mode
-- `npm run prettier` - Format code with Prettier
-- `npm run prettier.dry-run` - Check code formatting
-- `npm run test.ci` - Run tests and formatting checks (used in CI)
+- `pnpm build` - Build the plugin for distribution
+- `pnpm watch` - Build and watch for changes during development
+- `pnpm test` - Run the test suite
+- `pnpm test.watch` - Run tests in watch mode
+- `pnpm prettier` - Format code with Prettier
+- `pnpm prettier.dry-run` - Check code formatting
+- `pnpm test.ci` - Run tests and formatting checks (used in CI)
 
 ### Making Changes
 
@@ -84,17 +84,17 @@ sass/
    - Write unit tests for new functionality
    - Add integration tests if needed
    - Place test fixtures in `test/fixtures/` if testing file transformations
-   - Ensure all tests pass: `npm test`
+   - Ensure all tests pass: `pnpm test`
 
 4. **Format Code**
    ```bash
-   npm run prettier
+   pnpm run prettier
    ```
 
 5. **Build and Test**
    ```bash
-   npm run build
-   npm run test.ci
+   pnpm run build
+   pnpm run test.ci
    ```
 
 ## Testing
@@ -103,7 +103,7 @@ sass/
 
 - **Unit Tests**: Located in `test/*.spec.ts`
 - **Fixtures**: Sample `.scss` and `.sass` files in `test/fixtures/`
-- **Test Framework**: Jest with custom TypeScript preprocessor
+- **Test Framework**: Vitest
 
 ### Writing Tests
 
@@ -142,7 +142,7 @@ describe('your feature', () => {
 ### Code Formatting
 
 - We use Prettier with `@ionic/prettier-config`
-- Run `npm run prettier` before committing
+- Run `pnpm run prettier` before committing
 - The CI will fail if code is not properly formatted
 
 ### Naming Conventions
@@ -188,13 +188,13 @@ test: add tests for edge cases in util functions
 ### Before Submitting
 
 1. **Check Requirements**
-   - [ ] Code builds successfully (`npm run build`)
-   - [ ] All tests pass (`npm run test.ci`)
-   - [ ] Code is formatted (`npm run prettier`)
+   - [ ] Code builds successfully (`pnpm run build`)
+   - [ ] All tests pass (`pnpm run test.ci`)
+   - [ ] Code is formatted (`pnpm run prettier`)
    - [ ] Documentation updated if needed
 
 2. **Test Against Multiple Stencil Versions**
-   - The CI tests against Stencil v2, v3, v4, and the default version
+   - The CI tests against Stencil v4 and the default version
    - Ensure your changes work with all supported versions
 
 ### Pull Request Checklist
@@ -246,14 +246,14 @@ The Sass plugin implements the Stencil plugin interface:
 
 ### Debugging Build Issues
 
-- Use `npm run watch` for continuous building during development
+- Use `pnpm run watch` for continuous building during development
 - Check the `dist/` directory for build output
 - Verify TypeScript compilation with `tsc --noEmit`
 
 ### Testing with a Real Stencil Project
 
-1. Build the plugin: `npm run build`
-2. In your Stencil project: `npm link /path/to/sass`
+1. Build the plugin: `pnpm run build`
+2. In your Stencil project: `pnpm link /path/to/sass`
 3. Test your changes in a real-world scenario
 
 ## Release Process

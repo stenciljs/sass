@@ -5,22 +5,24 @@
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
-      "es2015",
+      "es2022",
       "dom"
     ],
     "esModuleInterop": true,
-    "module": "es2015",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "rootDir": "src",
     "outDir": "dist",
     "pretty": true,
     "removeComments": false,
-    "target": "es2017"
+    "target": "es2022"
   },
   "files": [
-    "src/index.ts"
+    "src/index.ts",
+    "src/wizard.ts"
   ]
 }

@@ -4,10 +4,15 @@ import rollupResolve from '@rollup/plugin-node-resolve';
 
 const pkg = JSON.parse((await fs.readFile('./package.json')));
 
+const external = [
+  "sass-embedded",
+  'node:path'
+];
+
 /**
- * Generate an ESM and a CJS output bundle
+ * Generate a single ESM output bundle
  */
-export default {
+const mainBundle = {
   // the input is expected to exist at this location as a result of running the typescript compiler
   input: 'src/index.ts',
 
@@ -18,20 +23,38 @@ export default {
     }),
   ],
 
-  external: [
-    "sass-embedded",
-    'fs',
-    'path'
+  external,
+
+  output: {
+    format: 'esm',
+    file: pkg.main
+  }
+};
+
+/**
+ * The `stencil.wizard` entry point, loaded by `@stencil/cli` to participate
+ * in `stencil init` / `stencil generate`. Bundled separately since it's only
+ * ever loaded via dynamic `import()` by the CLI, never by consumers directly.
+ */
+const wizardBundle = {
+  input: 'src/wizard.ts',
+
+  plugins: [
+    typescript(),
+    rollupResolve({
+      preferBuiltins: true
+    }),
   ],
 
-  output: [
-    {
-      format: 'cjs',
-      file: pkg.main
-    },
-    {
-      format: 'esm',
-      file: pkg.module
-    }
-  ]
+  external: [
+    ...external,
+    '@stencil/cli'
+  ],
+
+  output: {
+    format: 'esm',
+    file: 'dist/wizard.js'
+  }
 };
+
+export default [mainBundle, wizardBundle];

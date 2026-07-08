@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { sass } from '../dist';
-import { PluginCtx } from '../dist/declarations';
+import { sass } from '../dist/index.js';
+import type { PluginCtx } from '../dist/declarations';
 
 describe('test build', () => {
   let context: PluginCtx;
@@ -15,7 +16,7 @@ describe('test build', () => {
       },
       cache: null as any,
       sys: {
-        normalizePath: jest.fn((p: string) => p),
+        normalizePath: vi.fn((p: string) => p),
       } as any,
       fs: {
         readFileSync(filePath: string) {

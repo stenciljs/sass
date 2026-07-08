@@ -4,9 +4,9 @@
 
 Please check if your PR fulfills the following requirements:
 - [ ] Docs have been reviewed and added / updated if needed (for bug fixes / features)
-- [ ] Build (`npm run build`) was run locally and any changes were pushed
-- [ ] Tests (`npm test`) were run locally and passed
-- [ ] Prettier (`npm run prettier`) was run locally and passed
+- [ ] Build (`pnpm run build`) was run locally and any changes were pushed
+- [ ] Tests (`pnpm test`) were run locally and passed
+- [ ] Prettier (`pnpm run prettier`) was run locally and passed
 
 ## Pull request type
 
