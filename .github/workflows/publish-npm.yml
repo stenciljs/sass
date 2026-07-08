@@ -53,7 +53,7 @@ on:
         default: '.'
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
@@ -93,8 +93,33 @@ jobs:
         shell: bash
         working-directory: ${{ inputs.build-working-directory }}
 
-      - name: 🏷️ Set Version
+      - name: 🔧 Configure Git
+        if: ${{ inputs.tag == 'latest' }}
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+        shell: bash
+
+      - name: 🏷️ Bump Version, Commit & Tag
+        if: ${{ inputs.tag == 'latest' }}
+        id: bump-version
+        run: |
+          NEW_TAG=$(npm version ${{ inputs.version }} --tag-version-prefix="v" --message "v%s")
+          echo "tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
+        shell: bash
+        working-directory: ${{ inputs.package-directory }}
+
+      - name: 🏷️ Set Version (no commit)
+        if: ${{ inputs.tag != 'latest' }}
         run: npm version --no-git-tag-version --allow-same-version ${{ inputs.version }}
+        shell: bash
+        working-directory: ${{ inputs.package-directory }}
+
+      - name: 🔄 Push Version Commit & Tag
+        if: ${{ inputs.tag == 'latest' }}
+        run: |
+          git push origin HEAD:${{ github.ref_name }}
+          git push origin ${{ steps.bump-version.outputs.tag }}
         shell: bash
         working-directory: ${{ inputs.package-directory }}
 
