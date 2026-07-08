@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         # Run with multiple different versions of Stencil in parallel:
-        # 1. DEFAULT - uses the version of Stencil written in `package-lock.json`, keeping the same version used by the
+        # 1. DEFAULT - uses the version of Stencil written in `pnpm-lock.yaml`, keeping the same version used by the
         # Stencil team as a source of truth
         # 2. 2 - will install the latest release under major version 2 of Stencil. This should be kept as long as this
         # library supports Stencil v2.Y.Z
@@ -32,27 +32,31 @@ jobs:
       with:
         persist-credentials: false
     
+    - name: 📦 Enable Corepack (pnpm)
+      run: corepack enable
+      shell: bash
+
     - name: 🕸️ Get Core Dependencies
       uses: stenciljs/.github/actions/get-core-dependencies@main
 
     - name: 📝 Prettier Check
-      run: npm run prettier.dry-run
+      run: pnpm run prettier.dry-run
       shell: bash
 
     - name: 📦 Install Stencil ${{matrix.stencil_version}}
-      run: npm install --save-dev @stencil/core@${{matrix.stencil_version}}
+      run: pnpm add --save-dev @stencil/core@${{matrix.stencil_version}}
       shell: bash
       if: ${{ matrix.stencil_version != 'DEFAULT' }}
 
     - name: 📊 Report Stencil Version
-      run: npm ls @stencil/core
+      run: pnpm ls @stencil/core
       shell: bash
 
     - name: 🏗️ Build
-      run: npm run build -- --ci
+      run: pnpm run build
       shell: bash
 
     - name: 🧪 Test
-      run: npm run test.ci
+      run: pnpm run test.ci
       shell: bash
 

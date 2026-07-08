@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import * as d from '../src/declarations';
 import * as util from '../src/util';
 

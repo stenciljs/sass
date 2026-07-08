@@ -18,15 +18,19 @@ jobs:
           ref: ${{ github.event_name == 'pull_request_target' && format('refs/pull/{0}/merge', github.event.number) || '' }}
           persist-credentials: false
 
+      - name: 📦 Enable Corepack (pnpm)
+        run: corepack enable
+        shell: bash
+
       - name: 🕸️ Get Core Dependencies
         uses: stenciljs/.github/actions/get-core-dependencies@main
 
       - name: 🏗️ Stencil Sass Build
-        run: npm run build
+        run: pnpm run build
         shell: bash
 
       - name: 🧪 Unit Tests
-        run: npm test
+        run: pnpm test
         shell: bash
 
       - name: 📤 Upload Build Artifacts

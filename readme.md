@@ -28,6 +28,15 @@ export const config: Config = {
 
 During development, this plugin will kick-in for `.scss` or `.sass` style urls, and precompile them to CSS.
 
+## CLI integration
+
+`@stencil/sass` participates in the Stencil v5 CLI wizard:
+
+- `stencil init` - installing Sass as an integration (new project) or adding it to an existing project automatically adds the `sass()` plugin (and its import) to `stencil.config.ts`.
+- `stencil generate` - offers `.scss` and `.sass` alongside `.css` as stylesheet options when scaffolding a new component.
+
+No manual setup is required beyond installing the package; running `npx stencil init` and selecting **Sass** (or `npx stencil generate` if it's already installed) wires everything up.
+
 ## Options
 
 Sass options can be passed to the plugin within the stencil config, which are used directly by `sass`. Please reference [sass documentation](https://www.npmjs.com/package/sass) for all available options. Note that this plugin automatically adds the component's directory to the `includePaths` array.

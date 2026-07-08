@@ -2,51 +2,61 @@
   "name": "@stencil/sass",
   "version": "3.2.3",
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./wizard": {
+      "types": "./dist/wizard.d.ts",
+      "import": "./dist/wizard.js"
+    }
+  },
+  "stencil": {
+    "wizard": "./dist/wizard.js"
+  },
   "engines": {
-    "node": ">=12.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
   },
   "files": [
     "dist/"
   ],
   "scripts": {
     "prebuild": "rimraf ./dist",
-    "prettier": "npm run prettier.base -- --write",
-    "prettier.base": "prettier --cache \"src/**/*.ts\"",
-    "prettier.dry-run": "npm run prettier.base -- --list-different",
-    "build": "npm run prebuild && npm run rollup",
-    "watch": "npm run rollup -- --watch",
-    "rollup": "rollup -c rollup.config.mjs",
-    "version": "npm run build",
+    "prettier": "prettier --cache \"src/**/*.ts\" --write",
+    "prettier.dry-run": "prettier --cache \"src/**/*.ts\" --list-different",
+    "build": "rollup -c rollup.config.mjs",
+    "watch": "rollup -c rollup.config.mjs --watch",
+    "version": "pnpm run build",
     "release": "np",
-    "test": "jest",
-    "test.ci": "npm run test && npm run prettier.dry-run",
-    "test.watch": "jest --watch"
+    "test": "vitest run",
+    "test.ci": "pnpm run test && pnpm run prettier.dry-run",
+    "test.watch": "vitest"
   },
   "dependencies": {
     "sass-embedded": "^1.93.2"
   },
   "peerDependencies": {
-    "@stencil/core": ">=2.0.0 || >=3.0.0-beta.0 || >= 4.0.0-beta.0 || >= 4.0.0"
+    "@stencil/core": ">=2.0.0 || >=3.0.0 || >=4.0.0 || ^5.0.0 || >=5.0.0-alpha.19 <5.0.0-next.0"
   },
   "devDependencies": {
     "@ionic/prettier-config": "^4.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
-    "@stencil/core": "^4.38.2",
-    "@types/jest": "^30.0.0",
+    "@stencil/cli": "^5.0.0 || >=5.0.0-alpha.19 <5.0.0-next.0",
+    "@stencil/core": "^4.38.2 || ^5.0.0 || >=5.0.0-alpha.19 <5.0.0-next.0",
     "@types/node": "^24.9.2",
-    "jest": "^30.2.0",
     "np": "^11.0.1",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "rollup": "^4.52.5",
     "terser": "^5.44.0",
-    "ts-jest": "^29.4.5",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.10"
   },
   "repository": {
     "type": "git",
@@ -59,12 +69,9 @@
     "stencil",
     "sass"
   ],
-  "jest": {
-    "preset": "ts-jest"
-  },
   "prettier": "@ionic/prettier-config",
+  "packageManager": "pnpm@10.5.2",
   "volta": {
-    "node": "20.15.1",
-    "npm": "10.8.3"
+    "node": "24.11.1"
   }
 }
