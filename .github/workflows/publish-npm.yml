@@ -15,7 +15,7 @@ on:
         description: 'Node.js version used for publishing.'
         required: false
         type: string
-        default: '20'
+        default: '24'
       registry-url:
         description: 'npm registry URL.'
         required: false
@@ -35,7 +35,7 @@ on:
         description: 'Command used to install dependencies. Leave blank to skip.'
         required: false
         type: string
-        default: 'npm ci'
+        default: 'pnpm install --frozen-lockfile'
       install-working-directory:
         description: 'Working directory for the install command.'
         required: false
@@ -45,7 +45,7 @@ on:
         description: 'Command used to build the package. Leave blank to skip.'
         required: false
         type: string
-        default: 'npm run build'
+        default: 'pnpm run build'
       build-working-directory:
         description: 'Working directory for the build command.'
         required: false
@@ -62,6 +62,9 @@ jobs:
     steps:
       - name: 📥 Checkout Code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: 🟢 Configure Node for Publish
         if: ${{ inputs.scope == '' }}
