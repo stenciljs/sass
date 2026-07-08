@@ -104,8 +104,11 @@ jobs:
         if: ${{ inputs.tag == 'latest' }}
         id: bump-version
         run: |
-          NEW_TAG=$(npm version ${{ inputs.version }} --tag-version-prefix="v" --message "v%s")
-          echo "tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
+          # npm version's own stdout isn't captured here: our "version" lifecycle
+          # script (pnpm run build) writes rollup's build log to stdout too, and a
+          # multi-line value breaks the single-line GITHUB_OUTPUT format below.
+          npm version ${{ inputs.version }} --tag-version-prefix="v" --message "v%s"
+          echo "tag=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
         shell: bash
         working-directory: ${{ inputs.package-directory }}
 
