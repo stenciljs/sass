@@ -10,7 +10,10 @@ const external = [
 ];
 
 /**
- * Generate a single ESM output bundle
+ * Generate ESM and CJS output bundles.
+ *
+ * Stencil v4's `stencil.config.ts` is loaded via CommonJS, so a `require`-able
+ * build is still needed even though this repo otherwise targets ESM.
  */
 const mainBundle = {
   // the input is expected to exist at this location as a result of running the typescript compiler
@@ -25,10 +28,17 @@ const mainBundle = {
 
   external,
 
-  output: {
-    format: 'esm',
-    file: pkg.main
-  }
+  output: [
+    {
+      format: 'esm',
+      file: pkg.module
+    },
+    {
+      format: 'cjs',
+      file: pkg.main,
+      exports: 'named'
+    }
+  ]
 };
 
 /**

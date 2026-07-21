@@ -1,0 +1,15 @@
+{
+  "name": "stencil-v4-integration-fixture",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Not a real package. Builds a minimal Stencil v4 app that loads @stencil/sass from a CommonJS-style stencil.config.ts, guarding against regressions in the plugin's dual ESM/CJS output.",
+  "scripts": {
+    "build": "stencil build"
+  },
+  "devDependencies": {
+    "@stencil/core": "^4.0.0"
+  },
+  "dependencies": {
+    "@stencil/sass": "file:../../.."
+  }
+}

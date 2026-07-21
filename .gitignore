@@ -4,6 +4,12 @@ dist/
 .DS_Store
 *.tgz
 
+# Stencil v4 integration fixture build artifacts
+test/fixtures/stencil-v4-app/www/
+test/fixtures/stencil-v4-app/.stencil/
+test/fixtures/stencil-v4-app/pnpm-lock.yaml
+test/fixtures/stencil-v4-app/src/components.d.ts
+
 # IDEs
 .vscode/*
 .idea/*

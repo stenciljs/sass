@@ -62,3 +62,26 @@ jobs:
       run: pnpm run test.ci
       shell: bash
 
+    # Guards against regressions in the plugin's packaging (e.g. the exports/main
+    # fields losing CJS support) by actually building a Stencil v4 app whose
+    # stencil.config.ts is loaded via CommonJS `require`. Pinned to Stencil v4
+    # regardless of the matrix leg, since that's the specific loading path this
+    # checks; only needs to run once per CI run.
+    - name: 📥 Install Integration Fixture Dependencies
+      if: matrix.stencil_version == 'DEFAULT'
+      run: pnpm install --no-frozen-lockfile
+      shell: bash
+      working-directory: test/fixtures/stencil-v4-app
+
+    - name: 🧪 Integration Test (build a Stencil v4 app using this plugin)
+      if: matrix.stencil_version == 'DEFAULT'
+      run: pnpm run build
+      shell: bash
+      working-directory: test/fixtures/stencil-v4-app
+
+    - name: 🔍 Verify Integration Fixture Compiled Sass
+      if: matrix.stencil_version == 'DEFAULT'
+      run: grep -q 'color:rebeccapurple' www/build/*.entry.js
+      shell: bash
+      working-directory: test/fixtures/stencil-v4-app
+
