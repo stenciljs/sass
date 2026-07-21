@@ -1,0 +1,7 @@
+// Compiled through a Sass variable so a passthrough (non-compiling) plugin
+// would fail this check just as loudly as a plugin that fails to load at all.
+$greeting-color: rebeccapurple;
+
+.greeting {
+  color: $greeting-color;
+}
