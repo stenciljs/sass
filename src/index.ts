@@ -9,6 +9,47 @@ import { createResultsId, getRenderOptions, usePlugin } from './util';
  */
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
+type ConcurrencyLimiter = <T>(task: () => Promise<T>) => Promise<T>;
+
+function createConcurrencyLimiter(maxConcurrency: number): ConcurrencyLimiter {
+  let activeTasks = 0;
+  const pendingTasks: Array<() => void> = [];
+
+  return async <T>(task: () => Promise<T>): Promise<T> => {
+    if (activeTasks >= maxConcurrency) {
+      await new Promise<void>((resolve) => pendingTasks.push(resolve));
+    } else {
+      activeTasks += 1;
+    }
+
+    try {
+      return await task();
+    } finally {
+      const nextTask = pendingTasks.shift();
+
+      if (nextTask) {
+        nextTask();
+      } else {
+        activeTasks -= 1;
+      }
+    }
+  };
+}
+
+/**
+ * `sass-embedded` starts a compiler process for each legacy `render()` call.
+ * Reuse Stencil's worker limit to keep that process fan-out bounded.
+ */
+function getMaxConcurrentRenders(context: d.PluginCtx): number {
+  const maxConcurrentWorkers = context.config.maxConcurrentWorkers;
+
+  if (typeof maxConcurrentWorkers !== 'number' || !Number.isFinite(maxConcurrentWorkers)) {
+    return 1;
+  }
+
+  return Math.max(1, Math.floor(maxConcurrentWorkers));
+}
+
 /**
  * The entrypoint of the Stencil Sass plugin
  *
@@ -20,6 +61,8 @@ type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
  * @return the configured plugin
  */
 export function sass(opts: d.PluginOptions = {}): WithRequired<d.Plugin, 'transform'> {
+  let limitRenderConcurrency: ConcurrencyLimiter;
+
   return {
     name: 'sass',
     pluginType: 'css',
@@ -49,46 +92,51 @@ export function sass(opts: d.PluginOptions = {}): WithRequired<d.Plugin, 'transf
         return Promise.resolve(results);
       }
 
-      return new Promise<d.PluginTransformResults>((resolve) => {
-        try {
-          // invoke sass' compiler at this point
-          render(renderOpts, (err: LegacyException, sassResult: LegacyResult): void => {
-            if (err) {
-              loadDiagnostic(context, err, fileName);
-              results.code = `/**  sass error${err && err.message ? ': ' + err.message : ''}  **/`;
-              resolve(results);
-            } else {
-              results.dependencies = Array.from(sassResult.stats.includedFiles).map((dep) =>
-                context.sys.normalizePath(dep),
-              );
-              results.code = sassResult.css.toString();
+      limitRenderConcurrency ??= createConcurrencyLimiter(getMaxConcurrentRenders(context));
 
-              // write this css content to memory only so it can be referenced
-              // later by other plugins (autoprefixer)
-              // but no need to actually write to disk
-              context.fs.writeFile(results.id, results.code, { inMemoryOnly: true }).then(() => {
-                resolve(results);
+      return limitRenderConcurrency(
+        () =>
+          new Promise<d.PluginTransformResults>((resolve) => {
+            try {
+              // invoke sass' compiler at this point
+              render(renderOpts, (err: LegacyException, sassResult: LegacyResult): void => {
+                if (err) {
+                  loadDiagnostic(context, err, fileName);
+                  results.code = `/**  sass error${err && err.message ? ': ' + err.message : ''}  **/`;
+                  resolve(results);
+                } else {
+                  results.dependencies = Array.from(sassResult.stats.includedFiles).map((dep) =>
+                    context.sys.normalizePath(dep),
+                  );
+                  results.code = sassResult.css.toString();
+
+                  // write this css content to memory only so it can be referenced
+                  // later by other plugins (autoprefixer)
+                  // but no need to actually write to disk
+                  context.fs.writeFile(results.id, results.code, { inMemoryOnly: true }).then(() => {
+                    resolve(results);
+                  });
+                }
               });
-            }
-          });
-        } catch (e) {
-          // who knows, just good to play it safe here
-          const diagnostic: d.Diagnostic = {
-            level: 'error',
-            type: 'css',
-            language: 'scss',
-            header: 'sass error',
-            relFilePath: null,
-            absFilePath: null,
-            messageText: e,
-            lines: [],
-          };
-          context.diagnostics.push(diagnostic);
+            } catch (e) {
+              // who knows, just good to play it safe here
+              const diagnostic: d.Diagnostic = {
+                level: 'error',
+                type: 'css',
+                language: 'scss',
+                header: 'sass error',
+                relFilePath: null,
+                absFilePath: null,
+                messageText: e,
+                lines: [],
+              };
+              context.diagnostics.push(diagnostic);
 
-          results.code = `/**  sass error${e && e.message ? ': ' + e.message : ''}  **/`;
-          resolve(results);
-        }
-      });
+              results.code = `/**  sass error${e && e.message ? ': ' + e.message : ''}  **/`;
+              resolve(results);
+            }
+          }),
+      );
     },
   };
 }
