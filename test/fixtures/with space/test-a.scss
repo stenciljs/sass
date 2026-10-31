@@ -1,0 +1,5 @@
+@use 'sub dir/variables';
+
+body {
+  color: variables.$color;
+}

@@ -108,6 +108,9 @@ export function getRenderOptions(
       done: (data: LegacyImporterResult) => void,
     ): void => {
       if (typeof url === 'string') {
+        // Sass hands legacy importers a percent-encoded URL, but the result below is a file path
+        url = decodeImportUrl(url);
+
         if (url.startsWith('~')) {
           try {
             const m = getModuleId(url);
@@ -149,6 +152,23 @@ export function getRenderOptions(
   renderOpts.silenceDeprecations = [...(renderOpts.silenceDeprecations ?? []), 'legacy-js-api'];
 
   return renderOpts;
+}
+
+/**
+ * Decode a URL that Sass has passed to a legacy importer, so it can be used as a file path.
+ *
+ * Sass percent-encodes the URL of a `@use`/`@import` before handing it to a legacy importer, so a path containing a
+ * space arrives as `my%20dir/file`. Returning that as-is in `{ file }` makes Sass look for a literal `%20` on disk.
+ *
+ * @param url the URL received by the importer
+ * @returns the decoded URL, or the original URL if it is not validly percent-encoded
+ */
+export function decodeImportUrl(url: string): string {
+  try {
+    return decodeURIComponent(url);
+  } catch {
+    return url;
+  }
 }
 
 /**

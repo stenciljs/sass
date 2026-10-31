@@ -143,6 +143,36 @@ describe('test build', () => {
     expect(context.diagnostics[0].lines[2].text).toEqual('div');
   });
 
+  describe('paths containing a space', () => {
+    const fixtureDir = path.join(__dirname, 'fixtures', 'with space');
+
+    beforeEach(() => {
+      // providing resolveModuleId makes the plugin install its own importer, as Stencil does
+      context.config.rootDir = fixtureDir;
+      context.sys.resolveModuleId = vi.fn(() => Promise.resolve({}));
+    });
+
+    it('transform, use a relative path containing a space', async () => {
+      const filePath = path.join(fixtureDir, 'test-a.scss');
+      const sourceText = fs.readFileSync(filePath, 'utf8');
+      const s = sass();
+
+      const results = await s.transform(sourceText, filePath, context) as any;
+      expect(context.diagnostics).toEqual([]);
+      expect(results.code).toContain('color: red');
+    });
+
+    it('transform, injectGlobalPaths under a directory containing a space', async () => {
+      const filePath = path.join(fixtureDir, 'test-b.scss');
+      const sourceText = fs.readFileSync(filePath, 'utf8');
+      const s = sass({ injectGlobalPaths: ['globals.scss'] });
+
+      const results = await s.transform(sourceText, filePath, context) as any;
+      expect(context.diagnostics).toEqual([]);
+      expect(results.code).toContain('color: red');
+    });
+  });
+
   it('name', async () => {
     const s = sass();
     expect(s.name).toBe('sass');
