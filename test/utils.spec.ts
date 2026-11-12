@@ -141,3 +141,22 @@ describe('getModuleId', () => {
   });
 
 });
+describe('decodeImportUrl', () => {
+
+  it('decodes a percent-encoded space', () => {
+    expect(util.decodeImportUrl('/Users/my/my%20app/src/globals.scss')).toBe('/Users/my/my app/src/globals.scss');
+  });
+
+  it('decodes an encoded percent sign once', () => {
+    expect(util.decodeImportUrl('100%25/file')).toBe('100%/file');
+  });
+
+  it('leaves a URL without escapes unchanged', () => {
+    expect(util.decodeImportUrl('~@ionic/core/dist/ionic.css')).toBe('~@ionic/core/dist/ionic.css');
+  });
+
+  it('returns the original URL if it is not validly encoded', () => {
+    expect(util.decodeImportUrl('100%/file')).toBe('100%/file');
+  });
+
+});
